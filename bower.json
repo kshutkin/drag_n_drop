@@ -1,0 +1,14 @@
+{
+  "name": "drag_n_drop",
+  "version": "0.0.1",
+  "homepage": "https://github.com/kshutkin/drag_n_drop",
+  "authors": [
+    "kostya80@gmail.com"
+  ],
+  "description": "AngularJS drag and drop wrappers for jquery-ui",
+  "license": "MIT",
+  "dependencies": {
+    "angularjs": "~1.2.26",
+    "jqueryui": "~1.11.4"
+  }
+}
