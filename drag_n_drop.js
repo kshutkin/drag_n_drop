@@ -20,8 +20,9 @@ angular.module('drag_n_drop', [])
                         drop: function(event, ui) {
                             scope.$apply(function(scope) {
                                 scope.drope({
-                                    draggable: angular.element(ui.draggable).scope(),
-                                    droppable: angular.element(element).scope()
+                                    draggableScope: angular.element(ui.draggable).scope(),
+                                    droppableScope: angular.element(element).scope(),
+                                    $event: event
                                 });
                             });
                         }
