@@ -14,6 +14,7 @@ angular.module('drag_n_drop', [])
                         activeClass: attrs.droppableActiveClass,
                         hoverClass: attrs.droppableHoverClass,
                         tolerance: attrs.droppableTolerance || 'pointer',
+                        greedy: true,
                         accept: function(elem) {
                             return $.inArray(elem.attr("draggable"), accept) != -1;
                         },
