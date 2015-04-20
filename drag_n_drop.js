@@ -8,7 +8,7 @@ angular.module('drag_n_drop', [])
             },
             link: function(scope, element, attrs) {
                 scope.$watch('droppableFor', function(value) {
-                    var accept = (value || attrs.droppableFor).split("|");
+                    var accept = (value || attrs.droppableFor).split('|');
                     element.droppable({
                         addClasses: false,
                         activeClass: attrs.droppableActiveClass,
@@ -16,7 +16,7 @@ angular.module('drag_n_drop', [])
                         tolerance: attrs.droppableTolerance || 'pointer',
                         greedy: true,
                         accept: function(elem) {
-                            return $.inArray(elem.attr("draggable"), accept) != -1;
+                            return $.inArray(elem.attr('draggable'), accept) != -1;
                         },
                         drop: function(event, ui) {
                             scope.$apply(function(scope) {
@@ -32,11 +32,12 @@ angular.module('drag_n_drop', [])
             }
         };
     }])
-    .directive("draggable", function() {
+    .directive('draggable', function() {
         return function(scope, element, attrs) {
             element.draggable({
                 helper: attrs.draggableHelper || 'clone',
-                opacity: attrs.draggableOpacity || 0.3
+                opacity: attrs.draggableOpacity || 0.3,
+                appendTo: 'body'
             });
         };
     });
