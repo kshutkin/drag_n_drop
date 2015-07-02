@@ -1,14 +1,13 @@
 angular.module('drag_n_drop', [])
-    .directive('droppableFor', [function() {
+    .directive('droppableFor', ['$parse', function($parse) {
         return {
             restrict: 'A',
-            scope: {
-                drope: '&',
-                droppableFor: '='
-            },
             link: function(scope, element, attrs) {
-                scope.$watch('droppableFor', function(value) {
-                    var accept = (value || attrs.droppableFor).split('|');
+
+                var dropeHandler = attrs.drope && $parse(attrs.drope);
+
+                attrs.$observe('droppableFor', function(value) {
+                    var accept = (scope.$eval(value || attrs.droppableFor)).split('|');
                     element.droppable({
                         addClasses: false,
                         activeClass: attrs.droppableActiveClass,
@@ -20,7 +19,7 @@ angular.module('drag_n_drop', [])
                         },
                         drop: function(event, ui) {
                             scope.$apply(function(scope) {
-                                scope.drope({
+                                dropeHandler && dropeHandler(scope, {
                                     draggableScope: angular.element(ui.draggable).scope(),
                                     droppableScope: angular.element(element).scope(),
                                     $event: event
