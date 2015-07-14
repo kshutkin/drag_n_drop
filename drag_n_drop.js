@@ -50,7 +50,7 @@ angular.module('drag_n_drop', [])
                 attrs.onCreate && createHandler(handlersConfig, 'create', $parse(attrs.onCreate));
                 attrs.onAccept && createAcceptHandler(handlersConfig, $parse(attrs.onAccept));
 
-                if (config.watchOptions) {
+                if (config && config.watchOptions) {
                     config.watchOptions.forEach(function (optionName) {
                         watchOptions[optionName] = scope.$eval(config[optionName]);
                         scope.$watch(config[optionName], function (value) {
@@ -100,7 +100,7 @@ angular.module('drag_n_drop', [])
             attrs.onStart && createHandler(handlersConfig, 'start', $parse(attrs.onStart));
             attrs.onStop && createHandler(handlersConfig, 'stop', $parse(attrs.onStop));
 
-            if (config.watchOptions) {
+            if (config && config.watchOptions) {
                 config.watchOptions.forEach(function (optionName) {
                     watchOptions[optionName] = scope.$eval(config[optionName]);
                     scope.$watch(config[optionName], function (value) {
