@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('drag_n_drop', [])
     .provider('dndDragAndDropConfig', function () {
 
