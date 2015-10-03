@@ -33,7 +33,7 @@ angular.module('drag_n_drop', [])
             }
         }
     })
-    .directive('dndDroppable', ['$parse', 'dndDragAndDropConfig', function($parse, dndDragAndDropConfig) {
+    .directive('dndDroppable', ['$parse', 'dndDragAndDropConfig', '$timeout', function($parse, dndDragAndDropConfig, $timeout) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
@@ -62,12 +62,14 @@ angular.module('drag_n_drop', [])
                 element.droppable(angular.extend({}, dndDragAndDropConfig.droppableOptions, config, watchOptions, handlersConfig));
 
                 function createHandler(config, name, handler) {
+                    var applyFunc = name === 'drop' && (config.activeClass || dndDragAndDropConfig.droppableOptions.activeClass) ? $timeout : apply;
+
                     if (handler) {
                         config[name] = function (event, ui) {
-                            scope.$apply(function (scope) {
+                            applyFunc(function () {
                                 handler(scope, {
-                                    draggableScope: ui && angular.element(ui.draggable).scope(),
-                                    droppableScope: angular.element(element).scope(),
+                                    draggableScope: ui && angular.element(ui.draggable).controller('dndDraggable').scope(),
+                                    droppableScope: scope,
                                     $event: event
                                 });
                             });
@@ -78,49 +80,61 @@ angular.module('drag_n_drop', [])
                 function createAcceptHandler(config, handler) {
                     if (handler) {
                         config.accept = function (element) {
-                            scope.$apply(function (scope) {
-                                handler(scope, {
-                                    draggableScope: angular.element(element).scope()
-                                });
+                            var ctrl = angular.element(element).controller('dndDraggable');
+                            return ctrl && handler(scope, {
+                                draggableScope: ctrl.scope(),
+                                droppableScope: scope
                             });
                         };
                     }
+                }
+
+                function apply(handler) {
+                    scope.$apply(handler);
                 }
             }
         };
     }])
     .directive('dndDraggable', ['dndDragAndDropConfig', function(dndDragAndDropConfig) {
-        return function(scope, element, attrs) {
-            var config = scope.$eval(attrs.dndDraggable),
-                handlersConfig = {},
-                watchOptions = {};
+        return {
+            restrict: 'A',
+            controller: function ($scope) {
+                this.scope = function () {
+                    return $scope;
+                }
+            },
+            link: function(scope, element, attrs) {
+                var config = scope.$eval(attrs.dndDraggable),
+                    handlersConfig = {},
+                    watchOptions = {};
 
-            attrs.onCreate && createHandler(handlersConfig, 'create', $parse(attrs.onCreate));
-            attrs.onDrag && createHandler(handlersConfig, 'drag', $parse(attrs.onDrag));
-            attrs.onStart && createHandler(handlersConfig, 'start', $parse(attrs.onStart));
-            attrs.onStop && createHandler(handlersConfig, 'stop', $parse(attrs.onStop));
+                attrs.onCreate && createHandler(handlersConfig, 'create', $parse(attrs.onCreate));
+                attrs.onDrag && createHandler(handlersConfig, 'drag', $parse(attrs.onDrag));
+                attrs.onStart && createHandler(handlersConfig, 'start', $parse(attrs.onStart));
+                attrs.onStop && createHandler(handlersConfig, 'stop', $parse(attrs.onStop));
 
-            if (config && config.watchOptions) {
-                config.watchOptions.forEach(function (optionName) {
-                    watchOptions[optionName] = scope.$eval(config[optionName]);
-                    scope.$watch(config[optionName], function (value) {
-                        element.draggable('option', optionName, value);
-                    });
-                });
-            }
-
-            element.draggable(angular.extend({}, dndDragAndDropConfig.draggableOptions, config, watchOptions, handlersConfig));
-
-            function createHandler(config, name, handler) {
-                if (handler) {
-                    config[name] = function (event/*, ui*/) {
-                        scope.$apply(function (scope) {
-                            handler(scope, {
-                                draggableScope: angular.element(element).scope(),
-                                $event: event
-                            });
+                if (config && config.watchOptions) {
+                    config.watchOptions.forEach(function (optionName) {
+                        watchOptions[optionName] = scope.$eval(config[optionName]);
+                        scope.$watch(config[optionName], function (value) {
+                            element.draggable('option', optionName, value);
                         });
-                    };
+                    });
+                }
+
+                element.draggable(angular.extend({}, dndDragAndDropConfig.draggableOptions, config, watchOptions, handlersConfig));
+
+                function createHandler(config, name, handler) {
+                    if (handler) {
+                        config[name] = function (event) {
+                            scope.$apply(function (scope) {
+                                handler(scope, {
+                                    draggableScope: scope,
+                                    $event: event
+                                });
+                            });
+                        };
+                    }
                 }
             }
         };

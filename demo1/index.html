@@ -7,7 +7,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-        <script src="//rawgit.com/kshutkin/drag_n_drop/master/drag_n_drop.js"></script>
+        <script src="../drag_n_drop.js"></script>
         <script src="app.js"></script>
     </head>
 
@@ -15,10 +15,10 @@
         <div ng-controller="DemoCtrl">
             <h2>Drag&amp;drop</h2>
             <ul class="thumbnails">
-                <li ng-repeat="bucket in buckets" class="span4" dnd-droppable="{accept: classesStr(bucket.colors)}" on-drop="dropBadge(draggableScope.badge, bucket)">
-                    <span ng-repeat="color in bucket.colors" class="label label-{{classStr(color)}}">{{colorStr(color)}}</span>
+                <li ng-repeat="bucket in buckets" class="span4" dnd-droppable on-drop="dropBadge(draggableScope.badge, bucket)" on-accept="acceptBadge(draggableScope.badge, bucket)">
+                    <span ng-repeat="color in bucket.colors" class="label" ng-class="'label-'+ classStr(color)">{{colorStr(color)}}</span>
                     <div class="thumbnail well box">
-                        <span ng-repeat="badge in bucket.badges" class="badge badge-{{classStr(badge.color)}}" dnd-draggable>{{colorStr(badge.color)}}</span>
+                        <span ng-repeat="badge in bucket.badges" class="badge" ng-class="'badge-' + classStr(badge.color)" dnd-draggable>{{colorStr(badge.color)}}</span>
                     </div>
                 </li>
             </ul>

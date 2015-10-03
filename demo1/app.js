@@ -1,10 +1,12 @@
 var module = angular.module('ShowDirectives', ['drag_n_drop']);
 
-module.config(['dndDragAndDropConfigProvider', function(dndDragAndDropConfigProvider) {
+module.config(['dndDragAndDropConfigProvider', '$compileProvider', function(dndDragAndDropConfigProvider, $compileProvider) {
     dndDragAndDropConfigProvider.setGlobalDroppableOptions({
         hoverClass: 'dark',
         activeClass: 'red-border'
     });
+
+    $compileProvider.debugInfoEnabled(false);
 }]);
 
 module.controller('DemoCtrl', ['$scope', function($scope) {
@@ -38,11 +40,15 @@ module.controller('DemoCtrl', ['$scope', function($scope) {
         return result;
     };
 
-    $scope.dropBadge = function(bagde, bucket) {
-        var index = bagde.parent.badges.indexOf(bagde);
-        bagde.parent.badges.splice(index, 1);
-        bagde.parent = bucket;
-        bucket.badges.push(bagde);
+    $scope.dropBadge = function(badge, bucket) {
+        var index = badge.parent.badges.indexOf(badge);
+        badge.parent.badges.splice(index, 1);
+        badge.parent = bucket;
+        bucket.badges.push(badge);
+    };
+
+    $scope.acceptBadge = function(badge, bucket) {
+        return bucket.colors.indexOf(badge.color) !== -1;
     };
 
     function intRandom(n) {
