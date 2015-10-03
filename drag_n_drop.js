@@ -40,7 +40,10 @@ angular.module('drag_n_drop', [])
 
                 var config = scope.$eval(attrs.dndDroppable),
                     handlersConfig = {},
-                    watchOptions = {};
+                    watchOptions = {},
+                    activeClassTimeout;
+
+                activeClassTimeout = ((config && config.activeClass) || dndDragAndDropConfig.droppableOptions.activeClass) && attrs.onAccept;
 
                 attrs.onDrop && createHandler(handlersConfig, 'drop', $parse(attrs.onDrop));
                 attrs.onActivate && createHandler(handlersConfig, 'activate', $parse(attrs.onActivate));
@@ -62,7 +65,7 @@ angular.module('drag_n_drop', [])
                 element.droppable(angular.extend({}, dndDragAndDropConfig.droppableOptions, config, watchOptions, handlersConfig));
 
                 function createHandler(config, name, handler) {
-                    var applyFunc = name === 'drop' && (config.activeClass || dndDragAndDropConfig.droppableOptions.activeClass) ? $timeout : apply;
+                    var applyFunc = (name === 'drop' && activeClassTimeout) ? $timeout : apply;
 
                     if (handler) {
                         config[name] = function (event, ui) {
