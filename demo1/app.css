@@ -1,0 +1,19 @@
+.box {
+    height: 10em;
+}
+
+.dark {
+    background-color: #999;
+}
+
+.red-border {
+    outline: 1px solid red;
+}
+
+.badge {
+    cursor: move;
+}
+
+.label {
+    cursor: default;
+}
