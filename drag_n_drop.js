@@ -98,11 +98,11 @@ angular.module('drag_n_drop', [])
     .directive('dndDraggable', ['dndDragAndDropConfig', function(dndDragAndDropConfig) {
         return {
             restrict: 'A',
-            controller: function ($scope) {
+            controller: ['$scope', function ($scope) {
                 this.scope = function () {
                     return $scope;
-                }
-            },
+                };
+            }],
             link: function(scope, element, attrs) {
                 var config = scope.$eval(attrs.dndDraggable),
                     handlersConfig = {},
