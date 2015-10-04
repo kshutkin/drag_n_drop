@@ -38,12 +38,11 @@ angular.module('drag_n_drop', [])
             restrict: 'A',
             link: function(scope, element, attrs) {
 
-                var config = scope.$eval(attrs.dndDroppable),
+                var config = angular.extend({}, dndDragAndDropConfig.droppableOptions, scope.$eval(attrs.dndDroppable)),
                     handlersConfig = {},
                     watchOptions = {},
-                    activeClassTimeout;
-
-                activeClassTimeout = ((config && config.activeClass) || dndDragAndDropConfig.droppableOptions.activeClass) && attrs.onAccept;
+                    needDropTimeout = (config.activeClass && attrs.onAccept) || (config.hoverClass && config.greedy),
+                    apply = scope.$apply.bind(scope);
 
                 attrs.onDrop && createHandler(handlersConfig, 'drop', $parse(attrs.onDrop));
                 attrs.onActivate && createHandler(handlersConfig, 'activate', $parse(attrs.onActivate));
@@ -62,12 +61,14 @@ angular.module('drag_n_drop', [])
                     });
                 }
 
-                element.droppable(angular.extend({}, dndDragAndDropConfig.droppableOptions, config, watchOptions, handlersConfig));
+                element.droppable(angular.extend(config, watchOptions, handlersConfig));
 
                 function createHandler(config, name, handler) {
-                    var applyFunc = (name === 'drop' && activeClassTimeout) ? $timeout : apply;
+                    var applyFunc;
 
                     if (handler) {
+                        applyFunc = (name === 'drop' && needDropTimeout) ? $timeout : apply;
+
                         config[name] = function (event, ui) {
                             applyFunc(function () {
                                 handler(scope, {
@@ -90,10 +91,6 @@ angular.module('drag_n_drop', [])
                             });
                         };
                     }
-                }
-
-                function apply(handler) {
-                    scope.$apply(handler);
                 }
             }
         };

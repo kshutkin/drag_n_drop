@@ -16,9 +16,9 @@
             <h2>Drag&amp;drop</h2>
             <ul class="thumbnails">
                 <li ng-repeat="bucket in buckets" class="span4" dnd-droppable on-drop="dropBadge(draggableScope.badge, bucket)" on-accept="acceptBadge(draggableScope.badge, bucket)">
-                    <span ng-repeat="color in bucket.colors" class="label" ng-class="'label-'+ classStr(color)">{{colorStr(color)}}</span>
+                    <span ng-repeat="label in bucket.labels" class="label" ng-class="label.cssClass">{{label.text}}</span>
                     <div class="thumbnail well box">
-                        <span ng-repeat="badge in bucket.badges" class="badge" ng-class="'badge-' + classStr(badge.color)" dnd-draggable>{{colorStr(badge.color)}}</span>
+                        <span ng-repeat="badge in bucket.badges" class="badge" ng-class="badge.cssClass" dnd-draggable>{{badge.text}}</span>
                     </div>
                 </li>
             </ul>
