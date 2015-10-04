@@ -32,31 +32,30 @@ module.controller('DemoCtrl', ['$scope', 'Colors', 'Classes', function($scope, C
     };
 
     function createBadgesBucket() {
-        var colors = Colors.map(function (name, index) {
-                return index + 1;
-            }),
-            bucket = {
-                colors: colors,
+        var bucket = {
+                colors: Colors.map(function (name, index) {
+                    return index;
+                }),
                 badges: []
             };
 
         for (var i = 0; i < 2; i++) {
-            colors.splice(intRandom(colors.length - 1), intRandom(2) - 1);
+            bucket.colors.splice(intRandom(bucket.colors.length) - 1, intRandom(2) - 1);
         }
 
-        bucket.labels = colors.map(function (color) {
+        bucket.labels = bucket.colors.map(function (color) {
             return {
-                text: Colors[color - 1],
-                cssClass: 'label-' + Classes[color - 1]
+                text: Colors[color],
+                cssClass: 'label-' + Classes[color]
             };
         });
 
         for (var j = 0, n = intRandom(10); j < n; j++) {
-            var k = intRandom(colors.length) - 1;
+            var k = intRandom(bucket.colors.length) - 1;
             bucket.badges.push({
-                color: colors[k],
-                cssClass: 'badge-' + Classes[k],
-                text: Colors[k],
+                color: bucket.colors[k],
+                cssClass: 'badge-' + Classes[bucket.colors[k]],
+                text: Colors[bucket.colors[k]],
                 parent: bucket
             });
         }

@@ -41,7 +41,7 @@ angular.module('drag_n_drop', [])
                 var config = angular.extend({}, dndDragAndDropConfig.droppableOptions, scope.$eval(attrs.dndDroppable)),
                     handlersConfig = {},
                     watchOptions = {},
-                    needDropTimeout = (config.activeClass && attrs.onAccept) || (config.hoverClass && config.greedy),
+                    needDropTimeout = config.activeClass && attrs.onAccept,
                     apply = scope.$apply.bind(scope);
 
                 attrs.onDrop && createHandler(handlersConfig, 'drop', $parse(attrs.onDrop));
