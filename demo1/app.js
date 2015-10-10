@@ -17,7 +17,7 @@ module.controller('DemoCtrl', ['$scope', 'Colors', 'Classes', function($scope, C
     $scope.buckets = [];
 
     for (var i = 0; i < 6; i++) {
-        $scope.buckets.push(createBadgesBucket());
+        $scope.buckets.push(createBucket());
     }
 
     $scope.dropBadge = function(badge, bucket) {
@@ -31,7 +31,7 @@ module.controller('DemoCtrl', ['$scope', 'Colors', 'Classes', function($scope, C
         return bucket.colors.indexOf(badge.color) !== -1;
     };
 
-    function createBadgesBucket() {
+    function createBucket() {
         var bucket = {
                 colors: Colors.map(function (name, index) {
                     return index;
