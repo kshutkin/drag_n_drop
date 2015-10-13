@@ -161,4 +161,4 @@ In all handlers except accept handler you can use draggableScope, droppableScope
 
 **watchOptions** should work the same way as for dnd-draggable directive.
 
-##Bug reports, tests and PR are welcome
+##Bug reports, tests and PRs are welcome

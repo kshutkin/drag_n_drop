@@ -7,7 +7,8 @@ angular.module('drag_n_drop', [])
                 droppableOptions: {
                     addClasses: false,
                     tolerance: 'pointer',
-                    greedy: true
+                    greedy: true,
+                    removeHoverClassEventName: 'dndRemoveHoverClass'
                 },
                 draggableOptions: {
                     addClasses: false,
@@ -33,7 +34,7 @@ angular.module('drag_n_drop', [])
             }
         }
     })
-    .directive('dndDroppable', ['$parse', 'dndDragAndDropConfig', '$timeout', function($parse, dndDragAndDropConfig, $timeout) {
+    .directive('dndDroppable', ['$parse', 'dndDragAndDropConfig', '$timeout', '$rootScope', function($parse, dndDragAndDropConfig, $timeout, $rootScope) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
@@ -42,6 +43,7 @@ angular.module('drag_n_drop', [])
                     handlersConfig = {},
                     watchOptions = {},
                     needDropTimeout = config.activeClass && attrs.onAccept,
+                    needToRemoveHoverClass = config.hoverClass && config.greedy,
                     apply = scope.$apply.bind(scope);
 
                 attrs.onDrop && createHandler(handlersConfig, 'drop', $parse(attrs.onDrop));
@@ -63,6 +65,10 @@ angular.module('drag_n_drop', [])
 
                 element.droppable(angular.extend(config, watchOptions, handlersConfig));
 
+                needToRemoveHoverClass && scope.$on(dndDragAndDropConfig.droppableOptions.removeHoverClassEventName, function () {
+                    element.removeClass(config.hoverClass);
+                });
+
                 function createHandler(config, name, handler) {
                     var applyFunc;
 
@@ -75,6 +81,10 @@ angular.module('drag_n_drop', [])
                                     draggableScope: ui && angular.element(ui.draggable).controller('dndDraggable').scope(),
                                     droppableScope: scope,
                                     $event: event
+                                });
+
+                                needToRemoveHoverClass && $timeout(function () {
+                                    $rootScope.$broadcast(dndDragAndDropConfig.droppableOptions.removeHoverClassEventName);
                                 });
                             });
                         };
