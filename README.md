@@ -1,16 +1,16 @@
 AngularJS 1.x Drag and Drop directives (jQuery UI)
 =====================
-###Demo:
+### Demo:
 
 * [Demo1](https://rawgit.com/kshutkin/drag_n_drop/master/demo1/index.html)
 
-##Features:
+## Features:
 
 * Support all features of jQuery UI draggable and droppable
 * Easy configuration global and per element
 * Small code size (if you already use jQuery and jQuery UI in your project)
 
-##Get Started:
+## Get Started:
  
 #### (1) Install using bower
 
@@ -31,7 +31,7 @@ AngularJS 1.x Drag and Drop directives (jQuery UI)
 angular.module('myModuleName', ['drag_n_drop'])
 ```
 
-##How to use
+## How to use
 
 Add dnd-draggable on element that you want to be able to drag:
 
@@ -54,7 +54,7 @@ $scope.dropElement = function(draggableScope) {
 };
 ```
 
-##dndDragAndDropConfigProvider
+## dndDragAndDropConfigProvider
 
 Can be used to pass the default global parameters for other directives.
 
@@ -70,7 +70,7 @@ angular.module('MyApp').config(['dndDragAndDropConfigProvider', function(dndDrag
 }]);
 ```
 
-##dnd-draggable directive
+## dnd-draggable directive
 
 Marks element as draggable.
 
@@ -124,7 +124,7 @@ Example:
 
 In each handler you can use $event object and draggableScope object(probably useless in this case).
 
-##dnd-droppable directive
+## dnd-droppable directive
 
 Marks element as area to drop draggable elements.
 
@@ -161,4 +161,4 @@ In all handlers except accept handler you can use draggableScope, droppableScope
 
 **watchOptions** should work the same way as for dnd-draggable directive.
 
-##Bug reports, tests and PRs are welcome
+## Bug reports, tests and PRs are welcome
